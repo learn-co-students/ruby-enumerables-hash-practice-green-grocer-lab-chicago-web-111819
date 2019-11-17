@@ -13,20 +13,22 @@ def consolidate_cart(cart)
   p big_ol_hash
 end
 
-
+require "pry"
 
 def apply_coupons(cart, coupon)
   hash_after_coupons = {}
-  cart.reduce(coupon) do |item_name, coupon|
-    item_name = cart.keys[0]
-    if (coupon[0][:item] == item_name) && (item_name[:count] >= coupon[0][:num])
+  cart.each do |item_name|
+    name = item_name[0]
+    #binding.pry
+    if (coupon[0][:item] == name) && (cart[name][:count] >= coupon[0][:num])
+      
       unit_price = coupon[0][:cost] / coupon[0][:num]
-      quant_discounted = item_name[:count] / coupon[0][:num]
+      quant_discounted = cart[name][:count] / coupon[0][:num]
       new_price = unit_price * quant_discounted
-      hash_after_coupons += {"#{item_name.upcase} W/ COUPON" => {:price => new_price, :clearance => "true", :count => quant_discounted}}
-      item_name[:count] = item_name[:count] - quant_discounted
+      hash_after_coupons["#{name.upcase} W/ COUPON"] = {:price => new_price, :clearance => "true", :count => quant_discounted}}
+      name[:count] = name[:count] - quant_discounted
     else
-      hash_after_coupons += cart[0][{}]
+      hash_after_coupons[] cart[0][{}]
     end
   end
   hash_after_coupons
